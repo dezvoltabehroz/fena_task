@@ -1,0 +1,14 @@
+# ============ fena-backend ============
+# compiled output
+/fena-be/dist
+/fena-be/node_modules
+
+# ============ fena-frontend ============
+# dependencies
+/fena-fe/node_modules
+
+# testing
+/fena-fe/coverage
+
+# production
+/fena-fe/build

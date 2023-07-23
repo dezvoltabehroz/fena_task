@@ -1,0 +1,51 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      MYSQL_DATABASE: "fena_db"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: ""
+    command: --lower_case_table_names=1
+    ports:
+      - "3303:3306"
+    expose:
+      - "3306"
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+  backend:
+    build:
+      context: ./fena-backend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./fena-backend:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+      - db
+  frontend:
+    build:
+      context: ./fena-frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3001:3001
+    volumes:
+      - ./fena-frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  db:
+    driver: local
