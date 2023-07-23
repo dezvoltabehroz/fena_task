@@ -1,4 +1,4 @@
-# Feena Task
+# Fena Task
 
 ## Setup
 
